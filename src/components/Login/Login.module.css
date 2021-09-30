@@ -1,0 +1,17 @@
+.login__root {
+	font-family: serif;
+	color: #666;
+	min-height: 80vh;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	padding: 50px;
+}
+.login__root span {
+	cursor: pointer;
+}

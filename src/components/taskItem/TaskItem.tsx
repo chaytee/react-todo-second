@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
-import firebase from 'firebase/compat/app';
-import{ db } from "./firebase";
+import{ db } from "./../../firebase";
 import { ListItem, Grid, TextField } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import styles from "./TaskItem.module.css";
 
 type PROPS = {
 	id: string;
@@ -37,10 +37,10 @@ const TaskItem: FC<PROPS> = (props) => {
 				onChange={onChangeTaskTitle}
 				/>
 			</Grid>
-			<button onClick={editTask}>
+			<button onClick={editTask} className={styles.taskitem__icon}>
 				<EditIcon />
 			</button>
-			<button onClick={deleateTask}>
+			<button onClick={deleateTask} className={styles.taskitem__icon}>
 				<DeleteIcon />
 			</button>
 		</ListItem>

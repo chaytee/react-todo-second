@@ -1,13 +1,27 @@
 import {FC, useState, useEffect} from 'react';
-import{ db } from "./firebase";
-import './App.css';
+import{ auth, db } from "./firebase";
+import styles from "./App.module.css";
 import { FormControl, TextField, List } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import TaskItem from './TaskItem';
+import TaskItem from './components/taskItem/TaskItem';
+import { makeStyles } from '@material-ui/styles';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-const App: FC = () => {
+const useStyles = makeStyles({
+	field: {
+		marginTop: 30,
+		marginBottom: 20,
+	},
+	list: {
+		margin: "auto",
+		width: "80%",
+	}
+});
+
+const App: FC = (props:any) => {
 	const [tasks, setTasks] = useState([{id:"", title:""}])
 	const[input, setInput] = useState("");
+	const classes = useStyles();
 
 	useEffect(() => {
 		//.onSnapshotデータベースの情報を取得(変更がある度)
@@ -30,13 +44,24 @@ const App: FC = () => {
 		db.collection("tasks").add({title: input});
 		//次の入力のために初期化
 		setInput("");
-	}
+	};
+
 
 	return (
-		<div className="App">
+		<div className={styles.app__root}>
 			<h1>Todp App React/Firebase</h1>
+			<button className={styles.app__logout} onClick={ async () => {
+          try {
+            await auth.signOut();
+            props.history.push("login");
+          } catch (error:any) {
+            alert(error.message);
+          }
+        }}>
+			logout<ExitToAppIcon />
+			</button>
 			<FormControl>
-				<TextField
+				<TextField className={classes.field}
 				InputLabelProps={{
 					shrink: true,
 				}}
@@ -45,14 +70,16 @@ const App: FC = () => {
 				onChange={(e:React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
 				 />
 			</FormControl>
-			<button disabled={!input} onClick={newTask}>
+			<button disabled={!input} onClick={newTask} className={styles.app__icon}>
 				<AddCircleOutlineIcon />
 			</button>
-			<List>
-				{tasks.map((task) => (
-					<TaskItem key={task.id} id={task.id} title={task.title} />
-				))}
-			</List>
+			<div>
+				<List className={classes.list}>
+					{tasks.map((task) => (
+						<TaskItem key={task.id} id={task.id} title={task.title} />
+					))}
+				</List>
+			</div>
 		</div>
 	  );
 }

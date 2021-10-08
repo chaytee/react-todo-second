@@ -18,6 +18,16 @@
 	outline: none;
 	color: #666;
 	margin-left: 10px;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+	margin: auto;
+}
+.app__logout:hover {
+	opacity: 0.8;
 }
 button:disabled {
 	color: #ccc;

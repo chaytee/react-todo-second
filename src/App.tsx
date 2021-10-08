@@ -46,18 +46,20 @@ const App: FC = (props:any) => {
 		setInput("");
 	};
 
+	const onClickLogoutBtn = async () => {
+		try {
+		  await auth.signOut();
+		  props.history.push("login");
+		} catch (error:any) {
+		  alert(error.message);
+		}
+	};
+
 
 	return (
 		<div className={styles.app__root}>
 			<h1>Todp App React/Firebase</h1>
-			<button className={styles.app__logout} onClick={ async () => {
-          try {
-            await auth.signOut();
-            props.history.push("login");
-          } catch (error:any) {
-            alert(error.message);
-          }
-        }}>
+			<button className={styles.app__logout} onClick={onClickLogoutBtn}>
 			logout<ExitToAppIcon />
 			</button>
 			<FormControl>

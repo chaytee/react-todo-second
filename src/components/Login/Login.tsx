@@ -13,7 +13,7 @@ export const Login:FC = (props:any) => {
 		auth.onAuthStateChanged((user)=>{
 			user && props.history.push("/");
 		});
-	}, [props.history])
+	}, [props.history]);
 
 	//ユーザーが存在しない場合はログインページへ
 	useEffect(() => {
@@ -23,15 +23,32 @@ export const Login:FC = (props:any) => {
 		return () => unSub();
 	  }, [props.history]);
 
-
+	//メールアドレスとパスワードを更新
 	const onChangeloginMail = (e:React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-
 	const onChangePassword = (e:React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+	//ログインボタンの設定(例外処理の設定)
+	//--ログインモードの場合
+	const loginMode = async () => {
+		try {
+		//成功した場合
+			await auth.signInWithEmailAndPassword(email, password);
+			props.history.push("/");
+			} catch (error:any) {
+				alert(error.message);
+		}
+	};
+	//--レジスターモードの場合
+	const registerMode = async () => {
+		try {
+			await auth.createUserWithEmailAndPassword(email, password);
+			props.history.push("/");
+		} catch (error:any) {
+			alert(error.message);
+		}
+	};
 
+	//ログイン切り替え
 	const onClickSwichButton = () => setIsLogin(!isLogin);
-
-
-
 
 	return (
 		<div className={styles.login__root}>
@@ -52,7 +69,7 @@ export const Login:FC = (props:any) => {
 			<FormControl>
 			<TextField
 			InputLabelProps={{
-						shrink: true,
+				shrink: true,
 				}}
 			name="password"
 			label="password"
@@ -61,25 +78,7 @@ export const Login:FC = (props:any) => {
 			/>
 			</FormControl>
 			<br />
-			<Button variant="contained" color="primary" size="small" onClick={
-          isLogin
-            ? async () => {
-                try {
-                  await auth.signInWithEmailAndPassword(email, password);
-                  props.history.push("/");
-                } catch (error:any) {
-                  alert(error.message);
-                }
-              }
-            : async () => {
-                try {
-                  await auth.createUserWithEmailAndPassword(email, password);
-                  props.history.push("/");
-                } catch (error:any) {
-                  alert(error.message);
-                }
-              }
-        }>
+			<Button variant="contained" color="primary" size="small" onClick={isLogin ? loginMode : registerMode}>
 				{isLogin ? "login" : "register"}
 			</Button>
 			<br />
